@@ -1,0 +1,15 @@
+#!/bin/bash -eux 
+export API_FILE="${HOME}/.apikeys"
+export RANCHER_URL=http://localhost:8800/
+if [ ! -f ${API_FILE} ]; then
+   wget --post-data="" "${RANCHER_URL}/v1/projects/1a5/apikeys" -O - 2>&1 | tr '"' '\n' | grep "Value\$" -A 2 | grep -v "Value\$" | grep  -v "^\-\-" | grep -v "^:" | tee ${API_FILE}
+fi
+export RANCHER_ACCESS_KEY="$(cat ${API_FILE} | head -1)"
+export RANCHER_SECRET_KEY="$(cat ${API_FILE} | tail -1)"
+
+if [ ! -f /usr/local/bin/rancher-compose-v0.8.2-rc2/rancher-compose ]; then
+   wget https://github.com/rancher/rancher-compose/releases/download/v0.8.2-rc2/rancher-compose-linux-amd64-v0.8.2-rc2.tar.gz -O - | \
+        sudo tar -C /usr/local/bin/ -zxvf -
+fi
+
+/usr/local/bin/rancher-compose-v0.8.2-rc2/rancher-compose $@
