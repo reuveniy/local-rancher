@@ -1,10 +1,9 @@
 #!/bin/bash -eux
 for d in \
+   rancher/server \
    rancher/agent:v1.0.1 \
    ubuntu \
    mysql \
-   rancher/server \
-   rancher/agent \
    eventstore/eventstore \
    rsmoorthy/mssql \
    consul \
@@ -39,5 +38,4 @@ do
    sudo docker push localhost:5000/$d && \
    sudo docker rmi $d
    sudo docker images -q | xargs sudo docker rmi 2>/dev/null || true
-   exit
 done
