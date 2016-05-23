@@ -3,9 +3,9 @@ source $(dirname $0)/utils.sh
 wait_for_service 8800 /v1/registrationtokens
 
 TOKEN=""
-while [ -z "{$TOKEN}" ]; do
+while [ -z "${TOKEN}" ]; do
    TOKEN="$(wget "http://localhost:8800/v1/registrationtokens?projectId=1a5" -O - | tr '"' '\n' | grep ^token -A3 | head -3 | tail -1)"
-   if [ "${TOKEN}" != "transitioning" ]; then TOKEN=""; fi
+   if [ "${TOKEN}" == "transitioning" ]; then TOKEN=""; fi
 done
 
 RANCHER_SERVER_IP="$(ifconfig | grep "inet addr" | grep -v "172.17" | grep -v "127.0.0" | tr ':' ' ' | awk '{ print $3 }')"
