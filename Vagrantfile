@@ -28,12 +28,15 @@ Vagrant.configure(2) do |config|
        config.trigger.after :destroy do
           run "rm -Rfv ~/windows/VirtualBox*/dev-basebox"
        end
+       config.trigger.after :provision do
+          run "rm -Rf #{ENV['HOME']}\\.apikeys"
+       end
     end
   end
   config.vm.network "forwarded_port", guest: 8800, host: 8800
   config.vm.network "forwarded_port", guest: 5000, host: 5000
   config.vm.synced_folder ".", "/vagrant"
-  config.vm.provision "shell", path: "scripts/runall.sh"  
+  config.vm.provision "shell", path: "scripts/runall.sh"
   config.vm.boot_timeout = 600
 end
     

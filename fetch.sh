@@ -1,5 +1,6 @@
 #!/bin/bash -eux
 for d in \
+   rancher/agent-instance:v0.8.1 \
    rancher/server \
    rancher/agent:v1.0.1 \
    ubuntu \
